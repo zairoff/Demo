@@ -30,7 +30,7 @@ namespace Demo.Contacts.API.Mappers
 
             var contactResponse = new ContactResponse
             {
-                Type = contact.Type,
+                Type = contact.Type.Value,
                 Contact = contact.ContactInfo,
                 User = contact.ContactOwner
             };
