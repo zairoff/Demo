@@ -8,8 +8,8 @@
 
         public string ContactOwner { get; set; }
 
-        public ContactType Type { get; set; }
+        public ContactType? Type { get; set; }
 
-        public string ContactInfo { get; set; }
+        public string? ContactInfo { get; set; }
     }
 }
