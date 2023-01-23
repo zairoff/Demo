@@ -1,6 +1,6 @@
+using Demo.Users.API.Mapper;
 using Demo.Users.API.Repository;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +13,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<UsersDbContext>(options => 
                     options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
+
+builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+builder.Services.AddScoped<IUserMapper, UserMapper>();
 
 var app = builder.Build();
 
