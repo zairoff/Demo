@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Demo.RabbitMQ.Models
+namespace Demo.RabbitMQ.Settings.Models.User
 {
-    public class User
+    public class UserUpdated
     {
         public Guid UserId { get; set; }
 
