@@ -1,5 +1,6 @@
 using Demo.Contacts.API.Mappers;
 using Demo.Contacts.API.Repository;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,16 @@ builder.Services.AddDbContext<ContactsDbContext>(options =>
 
 builder.Services.AddTransient<IContactsRepository, ContactsRepository>();
 builder.Services.AddScoped<IContactsMapper, ContactsMapper>();
+
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, configurator) =>
+    {
+        var hostUrl = builder.Configuration.GetValue<string>("RabbitMQ:Host");
+        configurator.Host(hostUrl);
+        configurator.ConfigureEndpoints(context);
+    });
+});
 
 var app = builder.Build();
 

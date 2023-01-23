@@ -1,6 +1,8 @@
 ﻿using Demo.Contacts.API.Dtos;
 using Demo.Contacts.API.Mappers;
 using Demo.Contacts.API.Repository;
+using Demo.RabbitMQ.Settings.Models.Contact;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.Contacts.API.Controllers
@@ -11,11 +13,13 @@ namespace Demo.Contacts.API.Controllers
     {
         private readonly IContactsRepository _contactsRepository;
         private readonly IContactsMapper _contactsMapper;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public ContactsController(IContactsRepository usersRepository, IContactsMapper contactMapper)
+        public ContactsController(IContactsRepository usersRepository, IContactsMapper contactMapper, IPublishEndpoint publishEndpoint)
         {
             _contactsRepository = usersRepository;
             _contactsMapper = contactMapper;
+            _publishEndpoint = publishEndpoint;
         }
 
         [HttpGet]
@@ -61,6 +65,8 @@ namespace Demo.Contacts.API.Controllers
 
             _contactsRepository.Update(contact);
 
+            await _publishEndpoint.Publish(new ContactUpdated { UserId = contact.ContactOwnerId, Contact = contact.ContactInfo });
+
             return Ok(contact);
         }
 
@@ -78,6 +84,8 @@ namespace Demo.Contacts.API.Controllers
             }
 
             _contactsRepository.Delete(contact);
+
+            await _publishEndpoint.Publish(new ContactDeleted { UserId = contact.ContactOwnerId });
 
             return Ok(contact);
         }
