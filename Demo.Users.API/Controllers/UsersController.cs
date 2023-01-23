@@ -1,6 +1,8 @@
-﻿using Demo.Users.API.Dtos;
+﻿using Demo.RabbitMQ.Settings.Models.User;
+using Demo.Users.API.Dtos;
 using Demo.Users.API.Mapper;
 using Demo.Users.API.Repository;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.Users.API.Controllers
@@ -11,11 +13,13 @@ namespace Demo.Users.API.Controllers
     {
         private readonly IUsersRepository _usersRepository;
         private readonly IUserMapper _userMapper;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public UsersController(IUsersRepository usersRepository, IUserMapper userMapper)
+        public UsersController(IUsersRepository usersRepository, IUserMapper userMapper, IPublishEndpoint publishEndpoint)
         {
             _usersRepository = usersRepository;
             _userMapper = userMapper;
+            _publishEndpoint = publishEndpoint;
         }
 
         [HttpGet]
@@ -52,6 +56,8 @@ namespace Demo.Users.API.Controllers
 
             await _usersRepository.AddAsync(user);
 
+            await _publishEndpoint.Publish(new UserCreated { UserId = user.Id, Name = user.Name });
+
             return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
         }
 
@@ -73,6 +79,8 @@ namespace Demo.Users.API.Controllers
 
             _usersRepository.Update(user);
 
+            await _publishEndpoint.Publish(new UserUpdated { UserId = user.Id, Name = user.Name });
+
             return Ok(user);
         }
 
@@ -90,6 +98,8 @@ namespace Demo.Users.API.Controllers
             }
 
             _usersRepository.Delete(user);
+
+            await _publishEndpoint.Publish(new UserDeleted { UserId = user.Id });
 
             return Ok(user);
         }
