@@ -2,6 +2,7 @@ using Demo.Contacts.API.Mappers;
 using Demo.Contacts.API.Repository;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,11 +21,12 @@ builder.Services.AddScoped<IContactsMapper, ContactsMapper>();
 
 builder.Services.AddMassTransit(x =>
 {
+    x.AddConsumers(Assembly.GetEntryAssembly());
     x.UsingRabbitMq((context, configurator) =>
     {
         var hostUrl = builder.Configuration.GetValue<string>("RabbitMQ:Host");
         configurator.Host(hostUrl);
-        configurator.ConfigureEndpoints(context);
+        configurator.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter("Contacts", false));
     });
 });
 
