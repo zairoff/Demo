@@ -3,7 +3,7 @@ using Demo.Contacts.API.Models;
 
 namespace Demo.Contacts.API.Mappers
 {
-    public interface IContactMapper
+    public interface IContactsMapper
     {
         Contact MapContact(ContactUpdate contactUpdate);
         ContactResponse MapContact(Contact contact);

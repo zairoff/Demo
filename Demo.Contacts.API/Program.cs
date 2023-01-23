@@ -14,8 +14,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ContactsDbContext>(options =>
                     options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
 
-builder.Services.AddScoped<IContactsRepository, ContactsRepository>();
-builder.Services.AddScoped<IContactMapper, ContactMapper>();
+builder.Services.AddTransient<IContactsRepository, ContactsRepository>();
+builder.Services.AddScoped<IContactsMapper, ContactsMapper>();
 
 var app = builder.Build();
 
