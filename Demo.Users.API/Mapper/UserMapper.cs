@@ -21,15 +21,29 @@ namespace Demo.Users.API.Mapper
             return userResponse;
         }
 
-        public User MapUserRequest(UserRequest userRequest)
+        public User MapUser(UserCreate userCreate)
         {
-            if (userRequest == null) throw new ArgumentNullException(nameof(userRequest));
+            if (userCreate == null) throw new ArgumentNullException(nameof(userCreate));
 
             var user = new User
             {
-                Name = userRequest.FirstName,
-                SureName = userRequest.LastName,
-                Company = userRequest.CompanyName,
+                Name = userCreate.FirstName,
+                SureName = userCreate.LastName,
+                Company = userCreate.CompanyName,
+            };
+
+            return user;
+        }
+
+        public User MapUser(UserUpdate userUpdate)
+        {
+            if (userUpdate == null) throw new ArgumentNullException(nameof(userUpdate));
+
+            var user = new User
+            {
+                Name = userUpdate.FirstName,
+                SureName = userUpdate.LastName,
+                Company = userUpdate.CompanyName,
             };
 
             return user;

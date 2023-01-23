@@ -1,6 +1,6 @@
 ﻿namespace Demo.Users.API.Dtos
 {
-    public class UserRequest
+    public class UserUpdate
     {
         public string FirstName { get; set; }
 

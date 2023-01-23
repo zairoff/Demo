@@ -5,7 +5,9 @@ namespace Demo.Users.API.Mapper
 {
     public interface IUserMapper
     {
-        User MapUserRequest(UserRequest userRequest);
+        User MapUser(UserCreate userCreate);
+
+        User MapUser(UserUpdate userUpdate);
 
         UserResponse MapUser(User user);
     }
