@@ -9,6 +9,7 @@ namespace Demo.Users.API.Repository
         void Delete(User entity);
         void Update(User entity);
         Task<IEnumerable<User>> GetAllAsync();
-        Task<User> FindAsync(Expression<Func<User, bool>> expression);
+        Task<User> GetAsync(Guid id);
+        Task<IEnumerable<User>> FindAsync(Expression<Func<User, bool>> expression);
     }
 }

@@ -24,14 +24,19 @@ namespace Demo.Users.API.Repository
             _context.Users.Remove(entity);
         }
 
-        public async Task<User> FindAsync(Expression<Func<User, bool>> expression)
+        public async Task<IEnumerable<User>> FindAsync(Expression<Func<User, bool>> expression)
         {
-            return await _context.Users.Where(expression).FirstOrDefaultAsync();
+            return await _context.Users.Where(expression).ToListAsync();
         }
 
         public async Task<IEnumerable<User>> GetAllAsync()
         {
             return await _context.Users.ToListAsync();
+        }
+
+        public async Task<User> GetAsync(Guid id)
+        {
+            return await _context.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
         }
 
         public void Update(User entity)
