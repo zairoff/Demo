@@ -30,6 +30,7 @@ namespace Demo.Users.API.Mapper
                 Name = userCreate.FirstName,
                 SureName = userCreate.LastName,
                 Company = userCreate.CompanyName,
+                Contact = string.Empty,
             };
 
             return user;
