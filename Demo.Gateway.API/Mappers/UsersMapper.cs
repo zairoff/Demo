@@ -33,9 +33,31 @@ namespace Demo.Gateway.API.Mappers
             return user;
         }
 
-        public UserResponse MapUser(UsersAPI.Dtos.UserResponse userResponse)
+        public UserResponse? MapUser(UsersAPI.Dtos.UserResponse userResponse)
         {
-            if (userResponse == null) { throw new ArgumentNullException(nameof(userResponse)); }
+            var user = MapUserInternally(userResponse);
+            return user;
+        }
+
+        public IReadOnlyCollection<UserResponse>? MapUsers(List<UsersAPI.Dtos.UserResponse> userResponses)
+        {
+            if (userResponses == null || !userResponses.Any()) { return null; }
+
+            var internalUserResponses = new List<UserResponse>(userResponses.Count);
+            foreach(var userResponse in userResponses)
+            {
+                var internalUserResponse = MapUserInternally(userResponse);
+                if (internalUserResponse != null)
+                {
+                    internalUserResponses.Add(internalUserResponse);
+                }
+            }
+            return internalUserResponses;
+        }
+
+        private static UserResponse? MapUserInternally(UsersAPI.Dtos.UserResponse userResponse)
+        {
+            if (userResponse == null) { return null; }
 
             var user = new UserResponse
             {

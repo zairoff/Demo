@@ -4,9 +4,9 @@ namespace Demo.Gateway.API.Infrastructure
 {
     public interface IUsersInfrastructure
     {
-        Task CreateAsync(UserCreateArgs args);
-        Task RemoveAsync(Guid id);
-        Task UpdateAsync(UserUpdateArgs args);
+        Task<UserResponse> CreateAsync(UserCreateArgs args);
+        Task<UserResponse> RemoveAsync(Guid id);
+        Task<UserResponse> UpdateAsync(UserUpdateArgs args);
         Task<IEnumerable<UserResponse>> GetUsersAsync();
         Task<UserResponse> GetUserAsync(Guid id);
     }

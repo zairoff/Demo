@@ -9,6 +9,8 @@ namespace Demo.Gateway.API.Mappers
 
         UsersAPI.Models.User MapUser(UserUpdateArgs args);
 
-        UserResponse MapUser(UsersAPI.Dtos.UserResponse userResponse);
+        UserResponse? MapUser(UsersAPI.Dtos.UserResponse userResponse);
+
+        IReadOnlyCollection<UserResponse>? MapUsers(List<UsersAPI.Dtos.UserResponse> userResponses);
     }
 }

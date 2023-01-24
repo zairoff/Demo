@@ -1,5 +1,6 @@
-﻿using Demo.Gateway.API.Dtos.User;
+﻿using Internal = Demo.Gateway.API.Dtos.User;
 using Demo.Gateway.API.Mappers;
+using UsersApi = Demo.Users.API;
 using Newtonsoft.Json;
 using System.Text;
 
@@ -15,37 +16,72 @@ namespace Demo.Gateway.API.Infrastructure
         {
             _httpClient = httpClient;
             _usersMapper = usersMapper;
-            _usersApiUrl = configuration.GetValue<string>("");
+            _usersApiUrl = configuration.GetValue<string>("Services:UsersApiUrl");
         }
 
-        public async Task CreateAsync(UserCreateArgs args)
+        public async Task<Internal.UserResponse> CreateAsync(Internal.UserCreateArgs args)
         {
             var user = _usersMapper.MapUser(args);
 
             using var httpRequest = new HttpRequestMessage(HttpMethod.Post, $"{_usersApiUrl}/api/users");
             httpRequest.Content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
             using var httpResponse = await _httpClient.SendAsync(httpRequest);
-            httpResponse.EnsureSuccessStatusCode();
+            var response = await httpResponse.Content.ReadAsStringAsync();
+            var userResponse = JsonConvert.DeserializeObject<UsersApi.Dtos.UserResponse>(response);
+
+            var internalResponse = _usersMapper.MapUser(userResponse);
+
+            return internalResponse;
         }
 
-        public Task<UserResponse> GetUserAsync(Guid id)
+        public async Task<Internal.UserResponse> GetUserAsync(Guid id)
         {
-            throw new NotImplementedException();
+            using var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"{_usersApiUrl}/api/users/{id}");
+            using var httpResponse = await _httpClient.SendAsync(httpRequest);
+            var response = await httpResponse.Content.ReadAsStringAsync();
+            var userResponse = JsonConvert.DeserializeObject<UsersApi.Dtos.UserResponse>(response);
+
+            var internalResponse = _usersMapper.MapUser(userResponse);
+
+            return internalResponse;
         }
 
-        public Task<IEnumerable<UserResponse>> GetUsersAsync()
+        public async Task<IEnumerable<Internal.UserResponse>> GetUsersAsync()
         {
-            throw new NotImplementedException();
+            using var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"{_usersApiUrl}/api/users");
+            using var httpResponse = await _httpClient.SendAsync(httpRequest);
+            var response = await httpResponse.Content.ReadAsStringAsync();
+            var userResponse = JsonConvert.DeserializeObject<List<UsersApi.Dtos.UserResponse>>(response);
+
+            var internalResponses = _usersMapper.MapUsers(userResponse);
+
+            return internalResponses;
         }
 
-        public Task RemoveAsync(Guid id)
+        public async Task<Internal.UserResponse> RemoveAsync(Guid id)
         {
-            throw new NotImplementedException();
+            using var httpRequest = new HttpRequestMessage(HttpMethod.Delete, $"{_usersApiUrl}/api/users/{id}");
+            using var httpResponse = await _httpClient.SendAsync(httpRequest);
+            var response = await httpResponse.Content.ReadAsStringAsync();
+            var userResponse = JsonConvert.DeserializeObject<UsersApi.Dtos.UserResponse>(response);
+
+            var internalResponse = _usersMapper.MapUser(userResponse);
+
+            return internalResponse;
         }
 
-        public Task UpdateAsync(UserUpdateArgs args)
+        public async Task<Internal.UserResponse> UpdateAsync(Internal.UserUpdateArgs args)
         {
-            throw new NotImplementedException();
+            var user = _usersMapper.MapUser(args);
+
+            using var httpRequest = new HttpRequestMessage(HttpMethod.Put, $"{_usersApiUrl}/api/users");
+            httpRequest.Content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+            using var httpResponse = await _httpClient.SendAsync(httpRequest);
+            var response = await httpResponse.Content.ReadAsStringAsync();
+            var userResponse = JsonConvert.DeserializeObject<UsersApi.Dtos.UserResponse>(response);
+
+            var internalResponse = _usersMapper.MapUser(userResponse);
+            return internalResponse;
         }
     }
 }
