@@ -16,7 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<UsersDbContext>(options => 
                     options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
 
-builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+builder.Services.AddTransient<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IUserMapper, UserMapper>();
 
 builder.Services.AddMassTransit(x =>
