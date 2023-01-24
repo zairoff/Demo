@@ -1,9 +1,11 @@
 ﻿using Demo.RabbitMQ.Settings.Models.Contact;
 using Demo.Users.API.Repository;
 using MassTransit;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Demo.Users.API.Services
 {
+    [ExcludeFromCodeCoverage]
     public class ContactUpdatedConsumer : IConsumer<ContactUpdated>
     {
         private IUsersRepository _usersRepository;
