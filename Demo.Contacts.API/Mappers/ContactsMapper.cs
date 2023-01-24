@@ -5,18 +5,15 @@ namespace Demo.Contacts.API.Mappers
 {
     public class ContactsMapper : IContactsMapper
     {
-        public Contact MapContact(ContactUpdate contactUpdate)
+        public Contact MapContact(ContactUpdate contactUpdate, Contact contact)
         {
             if (contactUpdate == null)
             {
                 throw new ArgumentNullException(nameof(contactUpdate));
             }
 
-            var contact = new Contact
-            {
-                Type = contactUpdate.ContactType,
-                ContactInfo = contactUpdate.Contact
-            };
+            contact.Type = contactUpdate.ContactType;
+            contact.ContactInfo = contactUpdate.Contact;
 
             return contact;
         }

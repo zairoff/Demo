@@ -5,7 +5,7 @@ namespace Demo.Contacts.API.Mappers
 {
     public interface IContactsMapper
     {
-        Contact MapContact(ContactUpdate contactUpdate);
+        Contact MapContact(ContactUpdate contactUpdate, Contact contact);
         ContactResponse MapContact(Contact contact);
     }
 }

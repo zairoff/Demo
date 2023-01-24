@@ -47,6 +47,15 @@ namespace Demo.Contacts.API.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id">ID of contact owner</param>
+        /// <param name="contactUpdate">conatct update conatins contact type which is
+        /// 1 - Phone
+        /// 2 - Email
+        /// </param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -61,9 +70,9 @@ namespace Demo.Contacts.API.Controllers
                 return NotFound($"Contact for Id: {id} not found");
             }
 
-            contact = _contactsMapper.MapContact(contactUpdate);
+            var updatedContact = _contactsMapper.MapContact(contactUpdate, contact);
 
-            _contactsRepository.Update(contact);
+            _contactsRepository.Update(updatedContact);
 
             await _publishEndpoint.Publish(new ContactUpdated { UserId = contact.ContactOwnerId, Contact = contact.ContactInfo });
 
